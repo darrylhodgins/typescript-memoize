@@ -1,13 +1,9 @@
 {
   "name": "typescript-memoize",
-  "version": "0.0.1",
+  "version": "0.0.3",
   "description": "Memoize decorator for Typescript",
   "main": "./dist/memoize-decorator.js",
   "typings": "./dist/memoize-decorator.d.ts",
-  "files": [
-    "./dist/**/*.*",
-	"./src/**/*.*"
-  ],
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "prepublish": "tsc"
