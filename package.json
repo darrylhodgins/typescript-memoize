@@ -1,0 +1,38 @@
+{
+  "name": "typescript-memoize",
+  "version": "0.0.1",
+  "description": "Memoize decorator for Typescript",
+  "main": "./dist/memoize-decorator.js",
+  "typings": "./dist/memoize-decorator.d.ts",
+  "files": [
+    "./dist/**/*.*",
+	"./src/**/*.*"
+  ],
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "prepublish": "tsc"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/darrylhodgins/typescript-memoize.git"
+  },
+  "keywords": [
+    "typescript",
+    "memoize",
+    "functional",
+    "decorator"
+  ],
+  "author": "Darryl Hodgins <darrylh@darryh.ca>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/darrylhodgins/typescript-memoize/issues"
+  },
+  "homepage": "https://github.com/darrylhodgins/typescript-memoize#readme",
+  "dependencies": {
+    "core-js": "^2.4.1"
+  },
+  "devDependencies": {
+    "@types/core-js": "^0.9.35",
+    "typescript": "^2.1.4"
+  }
+}

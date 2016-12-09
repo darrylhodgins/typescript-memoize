@@ -1,0 +1,18 @@
+{
+	"compilerOptions": {
+		"target": "es5",
+		"module": "es6",
+		"moduleResolution": "node",
+		"sourceMap": true,
+		"emitDecoratorMetadata": true,
+		"experimentalDecorators": true,
+		"noImplicitAny": true,
+		"noUnusedParameters": false,
+		"noUnusedLocals": false,
+		"forceConsistentCasingInFileNames": true,
+		"removeComments": true,
+		"baseUrl": "./src",
+		"outDir": "./dist",
+		"declaration": true
+	}
+}
