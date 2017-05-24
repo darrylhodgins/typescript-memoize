@@ -49,7 +49,7 @@ function getNewFunction(originalMethod: () => void, hashFunction?: (...args: any
 				returnedValue = myMap.get(hashKey);
 			} else {
 				returnedValue = originalMethod.apply(this, args);
-				myMap.set(hashKey, originalMethod.apply(this, args));
+				myMap.set(hashKey, returnedValue);
 			}
 
 		} else {
