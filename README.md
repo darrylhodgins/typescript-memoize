@@ -1,5 +1,11 @@
 # typescript-memoize
 
+[![Dependencies Status](https://david-dm.org/darrylhodgins/typescript-memoize.svg)](https://david-dm.org/darrylhodgins/typescript-memoize)
+[![devDependency Status](https://david-dm.org/darrylhodgins/typescript-memoize/dev-status.svg)](https://david-dm.org/darrylhodgins/typescript-memoize#info=devDependencies)
+[![npm](https://img.shields.io/npm/v/typescript-memoize.svg)](https://www.npmjs.com/package/typescript-memoize)
+[![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/darrylhodgins/typescript-memoize/master/LICENSE)
+[![Build Status](https://travis-ci.org/darrylhodgins/typescript-memoize.svg?branch=master)](https://travis-ci.org/darrylhodgins/typescript-memoize)
+
 A memoize decorator for Typescript.
 
 ## Installation
