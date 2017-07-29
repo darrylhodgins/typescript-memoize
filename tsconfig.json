@@ -1,7 +1,7 @@
 {
 	"compilerOptions": {
 		"target": "es5",
-		"module": "es6",
+		"module": "umd",
 		"moduleResolution": "node",
 		"sourceMap": true,
 		"emitDecoratorMetadata": true,
@@ -13,6 +13,37 @@
 		"removeComments": true,
 		"baseUrl": "./src",
 		"outDir": "./dist",
-		"declaration": true
+		"declaration": true,
+		"lib": ["es2016", "dom"],
+		"importHelpers": true,
+		"noEmitHelpers": true,
+		"allowJs": false,
+		"types": [
+			"node",
+			"jasmine",
+			"core-js"
+		]
+	},
+	"files": [
+		"src/memoize-decorator.ts"
+	],
+	"exclude": [
+		"coverage",
+		"dist",
+		"doc",
+		"node_modules",
+		"test"
+	],
+	"formatCodeOptions": {
+		"indentSize": 4,
+		"tabSize": 4,
+		"insertSpaceAfterCommaDelimiter": true,
+		"insertSpaceAfterSemicolonInForStatements": true,
+		"insertSpaceBeforeAndAfterBinaryOperators": true,
+		"insertSpaceAfterKeywordsInControlFlowStatements": true,
+		"insertSpaceAfterFunctionKeywordForAnonymousFunctions": false,
+		"insertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis": false,
+		"placeOpenBraceOnNewLineForFunctions": false,
+		"placeOpenBraceOnNewLineForControlBlocks": false
 	}
 }
