@@ -1,6 +1,6 @@
 {
   "name": "typescript-memoize",
-  "version": "1.0.0-alpha.1",
+  "version": "1.0.0-alpha.2",
   "description": "Memoize decorator for Typescript",
   "main": "./dist/memoize-decorator.js",
   "typings": "./dist/memoize-decorator.d.ts",
