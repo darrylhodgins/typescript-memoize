@@ -12,9 +12,10 @@ module.exports = function(config){
 			'./specs/**/*.ts':  ['karma-typescript', 'sourcemap']
 		},
 		karmaTypescriptConfig: {
-			compilerOptions: config.compilerOptions || {
+			compilerOptions: {
 				noEmitHelpers: false,
-				importHelpers: true
+				importHelpers: true,
+				lib: ["es2016"]
 			},
 			reports: {
 				html: {

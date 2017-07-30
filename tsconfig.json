@@ -14,7 +14,7 @@
 		"baseUrl": "./src",
 		"outDir": "./dist",
 		"declaration": true,
-		"lib": ["es2016", "dom"],
+		"lib": ["es2016"],
 		"importHelpers": true,
 		"noEmitHelpers": true,
 		"allowJs": false,
