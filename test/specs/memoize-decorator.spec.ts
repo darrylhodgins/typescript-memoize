@@ -48,6 +48,18 @@ describe('Memoize()', () => {
 			multiplySpy.apply(this, arguments);
 			return a * b;
 		}
+
+		@Memoize(true)
+		public multiply2(a: number, b: number) {
+			multiplySpy.apply(this, arguments);
+			return a * b;
+		}
+
+		@Memoize(true)
+		public getGreeting2(greeting: string, planet: string): string {
+			getGreetingSpy.apply(this, arguments);
+			return greeting + ', ' + planet;
+		}
 	}
 
 
@@ -142,6 +154,34 @@ describe('Memoize()', () => {
 			expect(val2).toEqual(36);
 			expect(multiplySpy.calls.count()).toEqual(2);
 		});
+	});
+
+	describe('when passgin true to memoize as a hashFunction', () => {
+		it('should call the original method with the original arguments', () => {
+			let val1 = a.multiply2(5, 7);
+			expect(multiplySpy).toHaveBeenCalledWith(5, 7);
+		});
+
+		it('should only call the original method once', () => {
+			let val1 = a.multiply2(4, 6);
+			let val2 = a.multiply2(4, 6);
+			expect(val1).toEqual(24);
+			expect(val2).toEqual(24);
+			expect(multiplySpy.calls.count()).toEqual(1);
+		});
+
+
+		it('should take into consideration every parameter', () => {
+			let val1 = a.getGreeting2('Hello', 'World');
+			let val2 = a.getGreeting2('Hello', 'Moon');
+
+			expect(val1).toEqual('Hello, World');
+			expect(val2).toEqual('Hello, Moon');
+
+			expect(getGreetingSpy).toHaveBeenCalledTimes(2);
+		});
+
+
 	});
 
 

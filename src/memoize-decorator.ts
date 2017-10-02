@@ -1,10 +1,10 @@
-export function Memoize(hashFunction?: (...args: any[]) => any) {
+export function Memoize(autoHashOrHashFn?: boolean | ((...args: any[]) => any)) {
 	return (target: Object, propertyKey: string, descriptor: TypedPropertyDescriptor<any>) => {
 
 		if (descriptor.value != null) {
-			descriptor.value = getNewFunction(descriptor.value, hashFunction);
+			descriptor.value = getNewFunction(descriptor.value, autoHashOrHashFn);
 		} else if (descriptor.get != null) {
-			descriptor.get = getNewFunction(descriptor.get, hashFunction);
+			descriptor.get = getNewFunction(descriptor.get, autoHashOrHashFn);
 		} else {
 			throw 'Only put a Memoize() decorator on a method or get accessor.';
 		}
@@ -14,7 +14,7 @@ export function Memoize(hashFunction?: (...args: any[]) => any) {
 }
 
 let counter = 0;
-function getNewFunction(originalMethod: () => void, hashFunction?: (...args: any[]) => any) {
+function getNewFunction(originalMethod: () => void, autoHashOrHashFn?: boolean | ((...args: any[]) => any)) {
 	const identifier = ++counter;
 
 	// The function returned here gets called instead of originalMethod.
@@ -24,7 +24,7 @@ function getNewFunction(originalMethod: () => void, hashFunction?: (...args: any
 
 		let returnedValue: any;
 
-		if (hashFunction || args.length > 0) {
+		if (autoHashOrHashFn || args.length > 0) {
 
 			// Get or create map
 			if (!this.hasOwnProperty(propMapName)) {
@@ -39,8 +39,11 @@ function getNewFunction(originalMethod: () => void, hashFunction?: (...args: any
 
 			let hashKey: any;
 
-			if (hashFunction) {
-				hashKey = hashFunction.apply(this, args);
+			// If true is passed as first parameter, will automatically use every argument, passed to string
+			if (autoHashOrHashFn === true) {
+				hashKey = args.map(a=>a.toString()).join('!');
+			} else if (autoHashOrHashFn) {
+				hashKey = autoHashOrHashFn.apply(this, args);
 			} else {
 				hashKey = args[0];
 			}
