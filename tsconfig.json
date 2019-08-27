@@ -18,22 +18,10 @@
 		"importHelpers": true,
 		"noEmitHelpers": true,
 		"allowJs": false,
-		"types": [
-			"node",
-			"jasmine",
-			"core-js"
-		]
+		"types": ["node", "jasmine"]
 	},
-	"files": [
-		"src/memoize-decorator.ts"
-	],
-	"exclude": [
-		"coverage",
-		"dist",
-		"doc",
-		"node_modules",
-		"test"
-	],
+	"files": ["src/memoize-decorator.ts"],
+	"exclude": ["coverage", "dist", "doc", "node_modules", "test"],
 	"formatCodeOptions": {
 		"indentSize": 4,
 		"tabSize": 4,
