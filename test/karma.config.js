@@ -46,7 +46,7 @@ module.exports = function(config){
 		port: 9876,
 		colors: true,
 		autoWatch: false,
-		browsers: ['PhantomJS'],
+		browsers: ['ChromeHeadless'],
 		singleRun: true
 	});
 };
