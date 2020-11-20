@@ -16,7 +16,7 @@ npm install --save typescript-memoize
 
 ## Usage:
 
-```
+```typescript
 @Memoize(hashFunction?: (...args: any[]) => any)
 ```
 
@@ -35,7 +35,7 @@ These both work the same way. Subsequent calls to a memoized method without para
 
 I generally consider it an anti-pattern for a call to a `get` accessor to trigger an expensive operation.  Simply adding `Memoize()` to a `get` allows for seamless lazy-loading.
 
-```
+```typescript
 import {Memoize} from 'typescript-memoize';
 
 class SimpleFoo {
@@ -59,7 +59,7 @@ class SimpleFoo {
 
 And then we call them from somewhere else in our code:
 
-```
+```typescript
 let simpleFoo = new SimpleFoo();
 
 // Memoizes a calculated value and returns it:
@@ -82,7 +82,7 @@ Subsequent calls to this style of memoized method will always return the same va
 
 I'm not really sure why anyone would use this approach to memoize a method with *more* than one parameter, but it's possible.
 
-```
+```typescript
 import {Memoize} from 'typescript-memoize';
 
 class ComplicatedFoo {
@@ -114,7 +114,7 @@ class ComplicatedFoo {
 
 We call these methods from somewhere else in our code:
 
-```
+```typescript
 let complicatedFoo = new ComplicatedFoo();
 
 // Returns calculated value and memoizes it:
@@ -136,7 +136,7 @@ let greeterVal2 = complicatedFoo.getGreeting('Darryl', 'Mars');
 
 Pass in a `hashFunction` which takes the same parameters as your target method, to memoize values based on all parameters, or some other custom logic
 
-```
+```typescript
 import {Memoize} from 'typescript-memoize';
 
 class MoreComplicatedFoo {
@@ -163,7 +163,7 @@ class MoreComplicatedFoo {
 
 We call these methods from somewhere else in our code.  By now you should be getting the idea:
 
-```
+```typescript
 let moreComplicatedFoo = new MoreComplicatedFoo();
 
 // 'Hello, Darryl! Welcome to Earth'

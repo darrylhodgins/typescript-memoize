@@ -20,8 +20,7 @@
 		"allowJs": false,
 		"types": [
 			"node",
-			"jasmine",
-			"core-js"
+			"jasmine"
 		]
 	},
 	"files": [
