@@ -41,7 +41,7 @@ function getNewFunction(originalMethod: () => void, autoHashOrHashFn?: boolean |
 
 			// If true is passed as first parameter, will automatically use every argument, passed to string
 			if (autoHashOrHashFn === true) {
-				hashKey = args.map(a=>a.toString()).join('!');
+				hashKey = args.map(a => a.toString()).join('!');
 			} else if (autoHashOrHashFn) {
 				hashKey = autoHashOrHashFn.apply(this, args);
 			} else {
