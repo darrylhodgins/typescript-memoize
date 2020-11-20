@@ -8,7 +8,9 @@
     "test": "karma start test/karma.config.js --single-run",
     "prepublish": "npm run build",
     "clean": "rm -rf ./dist",
-    "build": "tsc"
+    "build": "tsc",
+    "tslint": "tslint --project .",
+    "eslint": "npm run tslint"
   },
   "files": [
     "dist",
