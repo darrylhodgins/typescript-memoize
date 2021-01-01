@@ -34,7 +34,7 @@ These both work the same way. Subsequent calls to a memoized method without para
 I generally consider it an anti-pattern for a call to a `get` accessor to trigger an expensive operation.  Simply adding `Memoize()` to a `get` allows for seamless lazy-loading.
 
 ```typescript
-import {Memoize} from 'typescript-memoize';
+import {Memoize,MemoizeExpiring} from 'typescript-memoize';
 
 class SimpleFoo {
 
@@ -44,6 +44,13 @@ class SimpleFoo {
 		// do some expensive operation to get data
 		return data;
 	}
+
+    // Memoize a method and expire the value after some time
+    @MemoizeExpiring(5000)
+    public getDataForSomeTime() {
+        // do some expensive operation to get data
+        return data;
+    }
 
 	// Memoize a getter
 	@Memoize()
