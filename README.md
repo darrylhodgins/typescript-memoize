@@ -38,12 +38,12 @@ import {Memoize,MemoizeExpiring} from 'typescript-memoize';
 
 class SimpleFoo {
 
-	// Memoize a method without parameters
-	@Memoize()
-	public getAllTheData() {
-		// do some expensive operation to get data
-		return data;
-	}
+    // Memoize a method without parameters
+    @Memoize()
+    public getAllTheData() {
+       // do some expensive operation to get data
+       return data;
+    }
 
     // Memoize a method and expire the value after some time
     @MemoizeExpiring(5000)
@@ -52,12 +52,12 @@ class SimpleFoo {
         return data;
     }
 
-	// Memoize a getter
-	@Memoize()
-	public get someValue() {
-		// do some expensive operation to calculate value
-		return value;
-	}
+    // Memoize a getter
+    @Memoize()
+    public get someValue() {
+        // do some expensive operation to calculate value
+        return value;
+    }
 
 }
 ```
