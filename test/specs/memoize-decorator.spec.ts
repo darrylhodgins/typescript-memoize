@@ -239,7 +239,7 @@ describe('MemoizeExpiring()', () => {
 				let an2 = a.getNumber();
 				expect(an0).not.toEqual(an2);
 				done();
-			}, 100);
+			}, 120);
 		});
 	});
 
