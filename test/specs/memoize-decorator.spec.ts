@@ -1,4 +1,5 @@
-import {Memoize} from '../../src/memoize-decorator';
+import { Memoize, MemoizeExpiring } from '../../src/memoize-decorator';
+import exp = require('constants');
 
 describe('Memoize()', () => {
 
@@ -182,6 +183,74 @@ describe('Memoize()', () => {
 		});
 
 
+	});
+
+
+});
+
+
+describe('MemoizeExpiring()', () => {
+
+	let getNumberSpy = jasmine.createSpy('getNumberSpy');
+	let valueSpy = jasmine.createSpy('valueSpy');
+
+	let a: MyClass;
+	let b: MyClass;
+
+	beforeEach(() => {
+		a = new MyClass();
+		b = new MyClass();
+
+		getNumberSpy.calls.reset();
+		valueSpy.calls.reset();
+	});
+
+	class MyClass {
+		@MemoizeExpiring(100)
+		public getNumber(): number {
+			getNumberSpy();
+			return Math.random();
+		}
+
+		@MemoizeExpiring(100)
+		public get value(): number {
+			//valueSpy();
+			return Math.random();
+		}
+	}
+
+
+	describe('when decorating a method', () => {
+		it("method should be memoized", () => {
+			expect(a.getNumber()).toEqual(a.getNumber());
+		});
+
+		it("multiple instances shouldn't share values for methods", () => {
+			expect(a.getNumber()).not.toEqual(b.getNumber());
+		});
+
+		it("should expire memoized values after 100ms", (done) => {
+			let an0 = a.getNumber();
+			setTimeout(() => {
+				let an1 = a.getNumber();
+				expect(an0).toEqual(an1);
+			}, 20);
+			setTimeout(() => {
+				let an2 = a.getNumber();
+				expect(an0).not.toEqual(an2);
+				done();
+			}, 120);
+		});
+	});
+
+	describe('when decorating a get accessor', () => {
+		it("accessor should be memoized", () => {
+			expect(a.value).toEqual(a.value);
+		});
+
+		it("multiple instances shouldn't share values for accessors", () => {
+			expect(a.value).not.toEqual(b.value);
+		});
 	});
 
 
