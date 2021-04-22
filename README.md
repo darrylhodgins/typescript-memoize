@@ -163,6 +163,17 @@ class MoreComplicatedFoo {
 		return greeting + '!!!!!';
 	}
 
+	// Memoize also accepts parameters via a single object argument
+	@Memoize({
+		expiring: 10000,
+		hashFunction: (name: string, planet: string) => {
+			return name + ';' + string;
+		}
+	})
+	public getSameBetterGreeting(name: string, planet: string) {
+		return 'Hello, ' + name + '! Welcome to ' + planet;
+	}
+
 }
 ```
 
@@ -175,9 +186,81 @@ let moreComplicatedFoo = new MoreComplicatedFoo();
 let greeterVal1 = moreComplicatedFoo.getBetterGreeting('Darryl', 'Earth');
 
 // 'Hello, Darryl! Welcome to Mars'
-let greeeterVal2 = moreComplicatedFoo.getBetterGreeting('Darryl', 'Mars');
+let greeterVal2 = moreComplicatedFoo.getBetterGreeting('Darryl', 'Mars');
 
 // Fill up the computer with useless greetings:
 let greeting = moreComplicatedFoo.memoryLeak('Hello');
+
+```
+
+## Memoize accepts one or more "tag" strings that allow the cache to be invalidated on command
+
+Passing an array with one or more "tag" strings these will allow you to later clear the cache of results associated with methods or the `get`accessors using the `clear()` function.
+
+The `clear()` function also requires an array of "tag" strings.
+
+```typescript
+import {Memoize} from 'typescript-memoize';
+
+class ClearableFoo {
+
+	// Memoize accepts tags
+	@Memoize({ tags: ["foo", "bar"] })
+	public getClearableGreeting(name: string, planet: string) {
+		return 'Hello, ' + name + '! Welcome to ' + planet;
+	}
+
+
+	// Memoize accepts tags
+	@Memoize({ tags: ["bar"] })
+	public getClearableSum(a: number, b: number) {
+		return a + b;
+	}
+
+}
+```
+
+We call these methods from somewhere else in our code.
+
+```typescript
+import {clear} from 'typescript-memoize';
+
+let clearableFoo = new ClearableFoo();
+
+// 'Hello, Darryl! Welcome to Earth'
+let greeterVal1 = clearableFoo.getClearableGreeting('Darryl', 'Earth');
+
+// Ignores the second parameter, and returns memoized value
+// 'Hello, Darryl! Welcome to Earth'
+let greeterVal2 = clearableFoo.getClearableGreeting('Darryl', 'Mars');
+
+// '3'
+let sum1 = clearableFoo.getClearableSum(2, 1);
+
+// Ignores the second parameter, and returns memoized value
+// '3'
+let sum2 = clearableFoo.getClearableSum(2, 2);
+
+clear(["foo"]);
+
+// The memoized values are cleared, return a new value
+// 'Hello, Darryl! Welcome to Mars'
+let greeterVal3 = clearableFoo.getClearableGreeting('Darryl', 'Mars');
+
+
+// The memoized value is not associated with 'foo' tag
+// '3'
+let sum3 = clearableFoo.getClearableSum(2, 2);
+
+clear(["bar"]);
+
+// The memoized values are cleared, return a new value
+// 'Hello, Darryl! Welcome to Mars'
+let greeterVal4 = clearableFoo.getClearableGreeting('Darryl', 'Mars');
+
+
+// The memoized values are cleared, return a new value
+// '4'
+let sum4 = clearableFoo.getClearableSum(2, 2);
 
 ```

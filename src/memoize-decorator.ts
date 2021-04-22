@@ -1,62 +1,92 @@
-export function Memoize(autoHashOrHashFn?: boolean | ((...args: any[]) => any)) {
-	return (target: Object, propertyKey: string, descriptor: TypedPropertyDescriptor<any>) => {
+interface MemoizeArgs {
+	expiring?: number;
+	hashFunction?: boolean | ((...args: any[]) => any);
+	tags?: string[];
+}
 
+export function Memoize(args?: MemoizeArgs | MemoizeArgs["hashFunction"]) {
+	let hashFunction: MemoizeArgs["hashFunction"];
+	let duration: MemoizeArgs["expiring"];
+	let tags: MemoizeArgs["tags"];
+
+	if(typeof args === "object") {
+		hashFunction = args.hashFunction;
+		duration = args.expiring;
+		tags = args.tags;
+	} else {
+		hashFunction = args;
+	}
+
+	return (target: Object, propertyKey: string, descriptor: TypedPropertyDescriptor<any>) => {
 		if (descriptor.value != null) {
-			descriptor.value = getNewFunction(descriptor.value, autoHashOrHashFn);
+			descriptor.value = getNewFunction(descriptor.value, hashFunction, duration, tags);
 		} else if (descriptor.get != null) {
-			descriptor.get = getNewFunction(descriptor.get, autoHashOrHashFn);
+			descriptor.get = getNewFunction(descriptor.get, hashFunction, duration, tags);
 		} else {
 			throw 'Only put a Memoize() decorator on a method or get accessor.';
 		}
-
 	};
 }
 
-export function MemoizeExpiring(duration: number, autoHashOrHashFn?: boolean | ((...args: any[]) => any)) {
-	return (target: Object, propertyKey: string, descriptor: TypedPropertyDescriptor<any>) => {
+export function MemoizeExpiring(expiring: number, hashFunction?: MemoizeArgs["hashFunction"]) {
+	return Memoize({
+		expiring,
+		hashFunction
+	});
+}
 
-		if (descriptor.value != null) {
-			descriptor.value = getNewFunction(descriptor.value, autoHashOrHashFn, duration);
-		} else if (descriptor.get != null) {
-			descriptor.get = getNewFunction(descriptor.get, autoHashOrHashFn, duration);
-		} else {
-			throw 'Only put a Memoize() decorator on a method or get accessor.';
+const clearCacheTagsMap: Map<string, Map<any, any>[]> = new Map();
+
+export function clear (tags: string[]): number {
+	const cleared: Set<Map<any, any>> = new Set();
+	for(const tag of tags) {
+		const maps = clearCacheTagsMap.get(tag);
+		for(const mp of maps) {
+			if(!cleared.has(mp)) {
+				mp.clear();
+				cleared.add(mp);
+			}
 		}
-
-	};
+	}
+	return cleared.size;
 }
 
-let counter = 0;
-function getNewFunction(originalMethod: () => void, autoHashOrHashFn?: boolean | ((...args: any[]) => any), duration: number = 0) {
-	const identifier = ++counter;
+function getNewFunction(originalMethod: () => void, hashFunction?: MemoizeArgs["hashFunction"], duration: number = 0, tags?: MemoizeArgs["tags"]) {
+	const propMapName = Symbol(`__memoized_map__`);
 
 	// The function returned here gets called instead of originalMethod.
 	return function (...args: any[]) {
-		const propValName = `__memoized_value_${identifier}`;
-		const propMapName = `__memoized_map_${identifier}`;
-
 		let returnedValue: any;
 
-		if (autoHashOrHashFn || args.length > 0 || duration > 0) {
+		// Get or create map
+		if (!this.hasOwnProperty(propMapName)) {
+			Object.defineProperty(this, propMapName, {
+				configurable: false,
+				enumerable: false,
+				writable: false,
+				value: new Map<any, any>()
+			});
+		}
+		let myMap: Map<any, any> = this[propMapName];
 
-			// Get or create map
-			if (!this.hasOwnProperty(propMapName)) {
-				Object.defineProperty(this, propMapName, {
-					configurable: false,
-					enumerable: false,
-					writable: false,
-					value: new Map<any, any>()
-				});
+		if(Array.isArray(tags)) {
+			for(const tag of tags) {
+				if(clearCacheTagsMap.has(tag)) {
+					clearCacheTagsMap.get(tag).push(myMap);
+				} else {
+					clearCacheTagsMap.set(tag, [myMap]);
+				}
 			}
-			let myMap: Map<any, any> = this[propMapName];
+		}
 
+		if (hashFunction || args.length > 0 || duration > 0) {
 			let hashKey: any;
 
 			// If true is passed as first parameter, will automatically use every argument, passed to string
-			if (autoHashOrHashFn === true) {
+			if (hashFunction === true) {
 				hashKey = args.map(a => a.toString()).join('!');
-			} else if (autoHashOrHashFn) {
-				hashKey = autoHashOrHashFn.apply(this, args);
+			} else if (hashFunction) {
+				hashKey = hashFunction.apply(this, args);
 			} else {
 				hashKey = args[0];
 			}
@@ -84,17 +114,12 @@ function getNewFunction(originalMethod: () => void, autoHashOrHashFn?: boolean |
 			}
 
 		} else {
-
-			if (this.hasOwnProperty(propValName)) {
-				returnedValue = this[propValName];
+			const hashKey = this;
+			if (myMap.has(hashKey)) {
+				returnedValue = myMap.get(hashKey);
 			} else {
 				returnedValue = originalMethod.apply(this, args);
-				Object.defineProperty(this, propValName, {
-					configurable: false,
-					enumerable: false,
-					writable: false,
-					value: returnedValue
-				});
+				myMap.set(hashKey, returnedValue);
 			}
 		}
 
