@@ -4,12 +4,12 @@ interface MemoizeArgs {
 	tags?: string[];
 }
 
-export function Memoize(args?: MemoizeArgs | MemoizeArgs["hashFunction"]) {
-	let hashFunction: MemoizeArgs["hashFunction"];
-	let duration: MemoizeArgs["expiring"];
-	let tags: MemoizeArgs["tags"];
+export function Memoize(args?: MemoizeArgs | MemoizeArgs['hashFunction']) {
+	let hashFunction: MemoizeArgs['hashFunction'];
+	let duration: MemoizeArgs['expiring'];
+	let tags: MemoizeArgs['tags'];
 
-	if(typeof args === "object") {
+	if (typeof args === 'object') {
 		hashFunction = args.hashFunction;
 		duration = args.expiring;
 		tags = args.tags;
@@ -28,7 +28,7 @@ export function Memoize(args?: MemoizeArgs | MemoizeArgs["hashFunction"]) {
 	};
 }
 
-export function MemoizeExpiring(expiring: number, hashFunction?: MemoizeArgs["hashFunction"]) {
+export function MemoizeExpiring(expiring: number, hashFunction?: MemoizeArgs['hashFunction']) {
 	return Memoize({
 		expiring,
 		hashFunction
@@ -39,10 +39,10 @@ const clearCacheTagsMap: Map<string, Map<any, any>[]> = new Map();
 
 export function clear (tags: string[]): number {
 	const cleared: Set<Map<any, any>> = new Set();
-	for(const tag of tags) {
+	for (const tag of tags) {
 		const maps = clearCacheTagsMap.get(tag);
-		for(const mp of maps) {
-			if(!cleared.has(mp)) {
+		for (const mp of maps) {
+			if (!cleared.has(mp)) {
 				mp.clear();
 				cleared.add(mp);
 			}
@@ -51,7 +51,7 @@ export function clear (tags: string[]): number {
 	return cleared.size;
 }
 
-function getNewFunction(originalMethod: () => void, hashFunction?: MemoizeArgs["hashFunction"], duration: number = 0, tags?: MemoizeArgs["tags"]) {
+function getNewFunction(originalMethod: () => void, hashFunction?: MemoizeArgs['hashFunction'], duration: number = 0, tags?: MemoizeArgs['tags']) {
 	const propMapName = Symbol(`__memoized_map__`);
 
 	// The function returned here gets called instead of originalMethod.
@@ -69,9 +69,9 @@ function getNewFunction(originalMethod: () => void, hashFunction?: MemoizeArgs["
 		}
 		let myMap: Map<any, any> = this[propMapName];
 
-		if(Array.isArray(tags)) {
-			for(const tag of tags) {
-				if(clearCacheTagsMap.has(tag)) {
+		if (Array.isArray(tags)) {
+			for (const tag of tags) {
+				if (clearCacheTagsMap.has(tag)) {
 					clearCacheTagsMap.get(tag).push(myMap);
 				} else {
 					clearCacheTagsMap.set(tag, [myMap]);
