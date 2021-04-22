@@ -248,15 +248,15 @@ clear(["foo"]);
 let greeterVal3 = clearableFoo.getClearableGreeting('Darryl', 'Mars');
 
 
-// The memoized value is not associated with 'foo' tag
+// The memoized value is not associated with 'foo' tag, returns memoized value
 // '3'
 let sum3 = clearableFoo.getClearableSum(2, 2);
 
 clear(["bar"]);
 
 // The memoized values are cleared, return a new value
-// 'Hello, Darryl! Welcome to Mars'
-let greeterVal4 = clearableFoo.getClearableGreeting('Darryl', 'Mars');
+// 'Hello, Darryl! Welcome to Earth'
+let greeterVal4 = clearableFoo.getClearableGreeting('Darryl', 'Earth');
 
 
 // The memoized values are cleared, return a new value
