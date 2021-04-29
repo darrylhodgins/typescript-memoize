@@ -2,9 +2,9 @@ export function Memoize(autoHashOrHashFn?: boolean | ((...args: any[]) => any)) 
 	return (target: Object, propertyKey: string, descriptor: TypedPropertyDescriptor<any>) => {
 
 		if (descriptor.value != null) {
-			descriptor.value = getNewFunction(descriptor.value, autoHashOrHashFn);
+			descriptor.value = getNewFunction(propertyKey, descriptor.value, autoHashOrHashFn);
 		} else if (descriptor.get != null) {
-			descriptor.get = getNewFunction(descriptor.get, autoHashOrHashFn);
+			descriptor.get = getNewFunction(propertyKey, descriptor.get, autoHashOrHashFn);
 		} else {
 			throw 'Only put a Memoize() decorator on a method or get accessor.';
 		}
@@ -16,9 +16,9 @@ export function MemoizeExpiring(duration: number, autoHashOrHashFn?: boolean | (
 	return (target: Object, propertyKey: string, descriptor: TypedPropertyDescriptor<any>) => {
 
 		if (descriptor.value != null) {
-			descriptor.value = getNewFunction(descriptor.value, autoHashOrHashFn, duration);
+			descriptor.value = getNewFunction(propertyKey, descriptor.value, autoHashOrHashFn, duration);
 		} else if (descriptor.get != null) {
-			descriptor.get = getNewFunction(descriptor.get, autoHashOrHashFn, duration);
+			descriptor.get = getNewFunction(propertyKey, descriptor.get, autoHashOrHashFn, duration);
 		} else {
 			throw 'Only put a Memoize() decorator on a method or get accessor.';
 		}
@@ -26,14 +26,11 @@ export function MemoizeExpiring(duration: number, autoHashOrHashFn?: boolean | (
 	};
 }
 
-let counter = 0;
-function getNewFunction(originalMethod: () => void, autoHashOrHashFn?: boolean | ((...args: any[]) => any), duration: number = 0) {
-	const identifier = ++counter;
-
+function getNewFunction(propertyKey: string, originalMethod: () => void, autoHashOrHashFn?: boolean | ((...args: any[]) => any), duration: number = 0) {
 	// The function returned here gets called instead of originalMethod.
 	return function (...args: any[]) {
-		const propValName = `__memoized_value_${identifier}`;
-		const propMapName = `__memoized_map_${identifier}`;
+		const propValName = `__memoized_value_${propertyKey}`;
+		const propMapName = `__memoized_map_${propertyKey}`;
 
 		let returnedValue: any;
 
