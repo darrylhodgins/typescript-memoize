@@ -41,10 +41,12 @@ export function clear (tags: string[]): number {
 	const cleared: Set<Map<any, any>> = new Set();
 	for (const tag of tags) {
 		const maps = clearCacheTagsMap.get(tag);
-		for (const mp of maps) {
-			if (!cleared.has(mp)) {
-				mp.clear();
-				cleared.add(mp);
+		if (maps) {
+			for (const mp of maps) {
+				if (!cleared.has(mp)) {
+					mp.clear();
+					cleared.add(mp);
+				}
 			}
 		}
 	}

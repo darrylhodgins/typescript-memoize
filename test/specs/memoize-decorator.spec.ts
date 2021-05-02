@@ -256,6 +256,8 @@ describe('Memoize()', () => {
 			clear(["bar"]);
 			let val6 = a.getGreeting4('Hello', 'World');
 
+			clear(["unknown"]);
+
 			expect(val1).toEqual('Hello, World');
 			expect(val2).toEqual('Hello, Moon');
 			expect(val3).toEqual('Hello, World');
@@ -267,7 +269,6 @@ describe('Memoize()', () => {
 		});
 
 	});
-
 
 });
 
