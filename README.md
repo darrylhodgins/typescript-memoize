@@ -45,7 +45,7 @@ class SimpleFoo {
        return data;
     }
 
-    // Memoize a method and expire the value after some time
+    // Memoize a method and expire the value after some time in milliseconds
     @MemoizeExpiring(5000)
     public getDataForSomeTime() {
         // do some expensive operation to get data
@@ -165,7 +165,7 @@ class MoreComplicatedFoo {
 
 	// Memoize also accepts parameters via a single object argument
 	@Memoize({
-		expiring: 10000,
+		expiring: 10000, // milliseconds
 		hashFunction: (name: string, planet: string) => {
 			return name + ';' + string;
 		}
