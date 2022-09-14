@@ -149,7 +149,7 @@ class MoreComplicatedFoo {
 	// Memoize a method with multiple parameters
 	// Memoize will remember values based on keys like: 'name;planet'
 	@Memoize((name: string, planet: string) => {
-		return name + ';' + string;
+		return name + ';' + planet;
 	})
 	public getBetterGreeting(name: string, planet: string) {
 		return 'Hello, ' + name + '! Welcome to ' + planet;
@@ -167,7 +167,7 @@ class MoreComplicatedFoo {
 	@Memoize({
 		expiring: 10000, // milliseconds
 		hashFunction: (name: string, planet: string) => {
-			return name + ';' + string;
+			return name + ';' + planet;
 		}
 	})
 	public getSameBetterGreeting(name: string, planet: string) {
